@@ -33,7 +33,7 @@ PROG=CalcPhys.x CalcGen.x CalcHiggs.x CalcHybrid.x CalcHMSSM.x CalcMSSM.x CalcIn
 
 .PHONY: directory lib clean distclean
 
-all: directory lib $(PROG)
+all: lib $(PROG)
 
 directory: $(OBJDIR)
 	@ mkdir -p $(OBJDIR)
@@ -43,7 +43,7 @@ $(OBJDIR)/%.o : %.cpp %.h directory
 
 lib: $(addprefix $(LIBDIR)/, $(LIB))
 
-$(addprefix $(LIBDIR)/, $(LIB)): $(addprefix $(OBJDIR)/, $(OBJECTS)) directory
+$(addprefix $(LIBDIR)/, $(LIB)): $(addprefix $(OBJDIR)/, $(OBJECTS))
 	@ echo "Making library $@"
 	@ ar rcs $@ $(addprefix $(OBJDIR)/, $(OBJECTS))
 
