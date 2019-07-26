@@ -3305,7 +3305,7 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    else if (type == 3)
+    else if (type == 4)
     {
         if (S1 == 1)
         {
@@ -3360,7 +3360,7 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    else if (type == 4)
+    else if (type == 3)
     {
         if (S1 == 1)
         {
@@ -3474,7 +3474,7 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type==3)
+    if (type==4)
     {
         if (S1==2)
         {
@@ -3498,7 +3498,7 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type==4)
+    if (type==3)
     {
         if (S1==2)
         {
@@ -3667,7 +3667,7 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    else if (type == 3)
+    else if (type == 4)
     {
         if (S1 == 1)
         {
@@ -3736,7 +3736,7 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    else if (type == 4)
+    else if (type == 3)
     {
         if (S1 == 1)
         {
@@ -3869,7 +3869,7 @@ int GetNLOFuncSSS(int S1, int S2, int S3, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type == 3)
+    if (type == 4)
     {
         if (S1 == 2)
         {
@@ -3898,7 +3898,7 @@ int GetNLOFuncSSS(int S1, int S2, int S3, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type == 4)
+    if (type == 3)
     {
         if (S1 == 2)
         {
