@@ -209,6 +209,30 @@ class DecayTable {
 	double  get_gamma_hZga(int h);
 
   /**
+  * @brief Decay width \f$ \Gamma(h\to WZ) \f$
+  * 
+  * This method calculates the decay width for the neutral
+  * Higgs boson \a h to a Z and a photon.
+  * 
+  * @param h  Index of decaying Higgs boson (4 = H+-)
+    *
+  * @returns The decay width in GeV
+  */
+    double  get_gamma_hWZ(int h);
+
+  /**
+  * @brief Decay width \f$ \Gamma(h\to W\gamma) \f$
+  * 
+  * This method calculates the decay width for the neutral
+  * Higgs boson \a h to a Z and a photon.
+  * 
+  * @param h  Index of decaying Higgs boson (4 = H+-)
+    *
+  * @returns The decay width in GeV
+  */
+    double  get_gamma_hWga(int h);
+
+  /**
   * @brief Total width \f$ \Gamma_h \f$
   * 
   * Calculates the total decay width of Higgs boson \a h 
@@ -350,6 +374,8 @@ class DecayTable {
   double gamma_hgg[5];
   double gamma_hgaga[5];
   double gamma_hZga[5];
+  double gamma_hWga[5]; // For H+- only
+  double gamma_hWZ[5]; // For H+- only
   double gamma_hvv[5][5];
   double gamma_hvh[5][5][5];
   double gamma_hhh[5][5][5];
@@ -370,8 +396,11 @@ class DecayTable {
   double  hdu_offshell(int h, int d, int u, double M);
   double  hgaga(int h);
   double  hZga(int h);
+  double  hWga(int h);
+  double  hWZ(int h);
   double  hgg(int h);
   double  PS2(double M, double m1, double m2);
+  double  LAM(double m12, double m22, double m32);
   
   double  interp(double R, double x, double y, double c);
 

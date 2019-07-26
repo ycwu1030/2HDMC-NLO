@@ -41,6 +41,8 @@ void DecayTable::set_model(THDM mod) {
     gamma_hgg[i]=-1.;
     gamma_hgaga[i]=-1.;
     gamma_hZga[i]=-1.;
+    gamma_hWga[i]=-1.;
+    gamma_hWZ[i]=-1.;
     for (j=1;j<5;j++) {
       gamma_hvv[i][j]=-1.;
       for (k=1;k<5;k++) {
@@ -454,6 +456,25 @@ double DecayTable::get_gamma_hZga(int h) {
   return gamma_hZga[h];
 }
 
+double DecayTable::get_gamma_hWga(int h) {
+
+  if (h!=4) return 0.;
+
+  if (gamma_hWga[h]>=0) return gamma_hWga[h];
+  
+  gamma_hWga[h] = hWga(h);
+  return gamma_hWga[h];
+}
+
+double DecayTable::get_gamma_hWZ(int h) {
+
+  if (h!=4) return 0.;
+
+  if (gamma_hWZ[h]>=0) return gamma_hWZ[h];
+  
+  gamma_hWZ[h] = hWZ(h);
+  return gamma_hWZ[h];
+}
 
 double DecayTable::get_gamma_hvv(int h, int V) {
 
@@ -665,6 +686,12 @@ double DecayTable::get_gammatot_h(int h) {
 
   // Z gamma
    gammatot_h[h] += get_gamma_hZga(h);
+
+  // W gamma
+   gammatot_h[h] += get_gamma_hWga(h);
+
+  // W Z
+   gammatot_h[h] += get_gamma_hWZ(h);
 
   // Gluons
    gammatot_h[h] += get_gamma_hgg(h);
@@ -1605,6 +1632,45 @@ double DecayTable::hgaga(int h) {
   return G;
 }
 
+
+double DecayTable::hWga(int h) {
+#ifdef NLOCOUPLINGS
+    if (h!=4) return 0.0;
+    double M = model.get_hmass(h);
+    double M2 = M*M;
+    double mW = sm.get_MW();
+    double mW2 = mW*mW;
+    complex <double> gS;
+    model.get_coupling_vvh(h,3,1,gS);// gS is from term g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu, and note that the full vertex will be something like F_{\mu\nu}W_{\mu\nu}
+    double G = (M2-mW2)/(8.0*M_PI*pow(M,3))*pow(abs(gS),2);
+    return G;
+#else
+    return 0.0;
+#endif
+}
+
+double DecayTable::LAM(double m12,double m22, double m32)
+{
+    return m12*m12+m22*m22+m32*m32-2.0*m12*m22-2.0*m12*m32-2.0*m22*m32;
+}
+
+double DecayTable::hWZ(int h) {
+#ifdef NLOCOUPLINGS
+    if (h!=4) return 0.0;
+    double M = model.get_hmass(h);
+    double M2 = M*M;
+    double mW = sm.get_MW();
+    double mW2 = mW*mW;
+    double mZ = sm.get_MZ();
+    double mZ2 = mZ*mZ;
+    complex <double> gS;
+    model.get_coupling_vvh(h,3,2,gS);// gS is from  g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu
+    double G = 1.0/(8.0*M_PI*pow(M,3))*sqrt(LAM(M2,mW2,mZ2))*(1.0+2.0*mW2*mZ2/(pow(M2-mW2-mZ2,2)))*pow(abs(gS),2);
+    return G;
+#else
+    return 0.0;
+#endif
+}
 
 
 double DecayTable::hZga(int h) {
