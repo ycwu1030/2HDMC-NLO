@@ -71,5 +71,61 @@ ComplexType CHHtt(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 
 ComplexType CHHuu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
+ComplexType CHLWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLbb(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLcc(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLdd(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLee(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLmm(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLss(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLtata(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLtt(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLuu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpHAWp(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpHHWp(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpHLWp(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpWpGa(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpWpZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpcs_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpcs_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpelev_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpelev_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpmuonv_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpmuonv_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHptauv_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHptauv_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHptb_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHptb_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpud_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpud_PR(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
 } //end namespace TypeII
 #endif

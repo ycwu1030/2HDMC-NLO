@@ -16,6 +16,7 @@
 #define Sec(i) (1/cos(i))
 #define Tan(i) tan(i)
 #define Cot(i) (1/tan(i))
+#define Sqrt(i) (sqrt(i))
 #define Power(a,b) (pow(a,b))
 #define Complex(a,b) ComplexType(a,b)
 #define Divergence (getdelta()) //For M2, we use MSbar scheme, so the whole expression will not be divergent, but it will explicitly contain symbol `Divergence`. In order to be consistent, we should use whatever LoopTools used for `Divergence`. By default it is 0.
