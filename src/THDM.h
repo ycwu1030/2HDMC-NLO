@@ -880,7 +880,7 @@ class THDM {
 	*  Minimum value used for widths, branching ratios etc. to determine when
 	*  something should be considered zero.
 	*/
-  const static double EPS = 1E-12;
+  const static double EPS = 1E-15;
 
  private:
   double      lambda[8];
