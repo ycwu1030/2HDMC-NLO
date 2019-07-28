@@ -39,17 +39,20 @@ using namespace std;
 int thdmc_set_param(int key, double smpara[], double para[], double res[], int slha);
 
 typedef ComplexType (*CFunc_NLO)(double, double, double, double, double, double, double, double, double, double, SM);
+ComplexType ZEROCOUPLING(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 // For simplicity, even though SVV, SSV and SSS coupling is independent of the Yukawa type, I still use them to indicate the formula.
 #define UPID 10
 #define DOID 20
 #define LEID 30
+#define NUID 40
 enum NLOSTATUS
 {
     NLOGOOD = 1,
     NOTIMPLEMENT = 0
 };
 int GetNLOFuncSFF(int S1,int F1,int F2,int type,CFunc_NLO &func);
-int GetNLOFuncSVV(int S1,int V1,int V2,int type,CFunc_NLO &func);
+int GetNLOFuncSFFC(int S1,int F1,int F2,int type,CFunc_NLO &func_PL, CFunc_NLO &func_PR);
+int GetNLOFuncSVV(int S1,int V1,int V2,int type,CFunc_NLO &func_gmunu, CFunc_NLO &func_kmuqnu);
 int GetNLOFuncSSV(int S1,int S2,int V1,int type,CFunc_NLO &func);
 int GetNLOFuncSSS(int S1,int S2,int S3,int type,CFunc_NLO &func);
 
@@ -66,6 +69,7 @@ class THDM {
   * THDM object. The model is not specified in any way by using this constructor.
   */
   THDM();
+  // ~THDM();
 
 
   /**
@@ -679,7 +683,7 @@ class THDM {
   * @param c  Returned (complex) value for coupling
   */
   void get_coupling_vvh(int v1,int v2,int h,complex <double> &c);
-  void get_coupling_vvh_NLO(int v1,int v2,int h,complex <double> &c);
+  void get_coupling_vvh_NLO(int v1,int v2,int h,complex <double> &c_gmunu,complex <double> &c_kmuqnu);
 
   /** 
   * @brief Couplings of vector bosons to pairs of Higgses
@@ -910,13 +914,19 @@ class THDM {
 
 // Added by Y.Wu
   bool Updated;
+  bool HpmUpdated;
   double L_MHL2, L_MHH2, L_MHA2, L_MHP2;
   double L_MHL, L_MHH, L_MHA, L_MHP, L_sba, L_L6, L_L7, L_M122, L_tb;
   double L_beta, L_alp;
   double L_M2;
+  gsl_matrix *rho_D_NLO;
+  gsl_matrix *rho_U_NLO;
+  gsl_matrix *RD_NLO;// = gsl_matrix_alloc(3,3); 
+  gsl_matrix *RU_NLO;// = gsl_matrix_alloc(3,3);
 
   // To save time, we can first check `Updated` to see if we need to rerun this function
   void store_param_phys();
+  // void store_Hpmff_Couplings();
 
 };
 

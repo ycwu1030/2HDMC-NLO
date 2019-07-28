@@ -304,7 +304,18 @@ double DecayTable::get_gamma_hdu(int h, int d, int u) {
   }
 
   complex <double> cs,cp;
+#ifdef NLOCOUPLINGS
+  if (M < m1p + m2p)
+  {
+    model.get_coupling_hdu(h,d,u,cs,cp);
+  }
+  else
+  {
+    model.get_coupling_hdu_NLO(h,d,u,cs,cp);
+  }
+#else
   model.get_coupling_hdu(h,d,u,cs,cp);
+#endif
   
   if (h<4) {
 	gamma_hdu[h][d][u] = hff_onshell(M,m1p,m1run,m2p,m2run,cs,cp,3,h,false);
@@ -872,6 +883,8 @@ void DecayTable::print_decays(FILE* output,int h, bool full, bool les) {
   double gvh[4][5];
   double ghh[5];
   double ghZga;
+  double ghWga;
+  double ghWZ;
   double ghgg;
   double brdd[4][4];
   double bruu[4][4];
@@ -882,6 +895,8 @@ void DecayTable::print_decays(FILE* output,int h, bool full, bool les) {
   double brvh[4][5];
   double brhh[5];
   double brhZga = 0.;
+  double brhWga = 0.;
+  double brhWZ = 0.;
   double brhgg = 0.;
   
   // Fermion decay modes
@@ -914,6 +929,14 @@ void DecayTable::print_decays(FILE* output,int h, bool full, bool les) {
   ghZga = get_gamma_hZga(h);
   brhZga = br(ghZga,gtot);
 
+  // W gamma
+  ghWga = get_gamma_hWga(h);
+  brhWga = br(ghWga,gtot);
+  // if (h==4) printf("Gamma_Wga: %.15f\n",ghWga);
+  // W Z
+  ghWZ = get_gamma_hWZ(h);
+  brhWZ = br(ghWZ,gtot);
+  // if (h==4) printf("Gamma_WZ: %.15f\n",ghWZ);
   // Gluons
   ghgg = get_gamma_hgg(h);
   brhgg = br(ghgg,gtot);
@@ -940,6 +963,16 @@ void DecayTable::print_decays(FILE* output,int h, bool full, bool les) {
 	  print_decay(hnames[h],lnames[i],nnames[j],gln[i][j],brln[i][j]);
       }
     }
+    if (les) 
+      print_decay_LesHouches(output,brhWga,-24,22);
+    else
+      print_decay(hnames[h],"W+","ga",ghWga,brhWga);
+
+    if (les) 
+      print_decay_LesHouches(output,brhWZ,-24,23);
+    else
+      print_decay(hnames[h],"W+","Z ",ghWZ,brhWZ);
+
     for (int i=2;i<4;i++) {
       for (int j=1;j<=4;j++) {
         int sgn = 1;
@@ -1127,16 +1160,17 @@ double DecayTable::hvv_all(int h, int V,double M) {
   old_handler = NULL;
   w = NULL;
 
-  complex <double> c;
+  complex <double> c; // This is for gmunu
 #ifdef NLOCOUPLINGS
-  if (M<2.0*m)
-  {
-      model.get_coupling_vvh(V,V,h,c);
-  }
-  else
-  {
-      model.get_coupling_vvh_NLO(V,V,h,c);
-  }
+  complex <double> c_kmuqnu;
+  // if (M<2.0*m)
+  // {
+  //     model.get_coupling_vvh(V,V,h,c);
+  // }
+  // else
+  // {
+      model.get_coupling_vvh_NLO(V,V,h,c,c_kmuqnu);
+  // }
 #else
   model.get_coupling_vvh(V,V,h,c);
 #endif
@@ -1151,7 +1185,15 @@ double DecayTable::hvv_all(int h, int V,double M) {
     dV = 1.;
   } else return 0.;
 
+#ifdef NLOCOUPLINGS
+  double dm2 = M*M - 2.0*m*m;
+  double Coefc12 = (2.0 + pow(dm2,2)/4.0/pow(m,4));
+  double Coefc1c2 = dm2*(-0.5+pow(dm2,2)/8.0/pow(m,4));
+  double Coefc22 = pow(pow(M,4)-4.0*M*M*m*m,2)/16.0/pow(m,4);
+  double KHVV = dV*(pow(abs(c),2)+2.0*Re(c*conj(c_kmuqnu))*Coefc1c2/Coefc12 + pow(abs(c_kmuqnu),2)*Coefc22/Coefc12)/(64.*M_PI)*pow(M,3)/pow(m,4);
+#else
   double KHVV = dV*pow(abs(c),2)/(64.*M_PI)*pow(M,3)/pow(m,4);
+#endif
   G = KHVV*result;
 
   return G;
@@ -1640,9 +1682,12 @@ double DecayTable::hWga(int h) {
     double M2 = M*M;
     double mW = sm.get_MW();
     double mW2 = mW*mW;
-    complex <double> gS;
-    model.get_coupling_vvh(h,3,1,gS);// gS is from term g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu, and note that the full vertex will be something like F_{\mu\nu}W_{\mu\nu}
-    double G = (M2-mW2)/(8.0*M_PI*pow(M,3))*pow(abs(gS),2);
+    complex <double> c_gmunu;
+    complex <double> c_kmuqnu;
+    model.get_coupling_vvh_NLO(3,1,h,c_gmunu,c_kmuqnu);// gS is from term g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu, and note that the full vertex will be something like F_{\mu\nu}W_{\mu\nu}
+    // cout<<"Wga: c_gmunu: "<<c_gmunu<<" c_kmuqnu: "<<c_kmuqnu<<endl;
+    // double G = (M2-mW2)/(8.0*M_PI*pow(M,3))*pow(abs(gS),2);
+    double G = 1.0/(16.0*M_PI*pow(M,3))*(M2-mW2)*(pow(abs(c_gmunu),2)*3.0 - pow(M2-mW2,2)/4.0*pow(abs(c_kmuqnu),2));
     return G;
 #else
     return 0.0;
@@ -1663,9 +1708,15 @@ double DecayTable::hWZ(int h) {
     double mW2 = mW*mW;
     double mZ = sm.get_MZ();
     double mZ2 = mZ*mZ;
-    complex <double> gS;
-    model.get_coupling_vvh(h,3,2,gS);// gS is from  g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu
-    double G = 1.0/(8.0*M_PI*pow(M,3))*sqrt(LAM(M2,mW2,mZ2))*(1.0+2.0*mW2*mZ2/(pow(M2-mW2-mZ2,2)))*pow(abs(gS),2);
+    complex <double> c_gmunu;
+    complex <double> c_kmuqnu;
+    model.get_coupling_vvh_NLO(3,2,h,c_gmunu,c_kmuqnu);// gS is from  g_{\mu\nu} gS \epsilon_\mu \epsilon_\nu
+    // double G = 1.0/(8.0*M_PI*pow(M,3))*sqrt(LAM(M2,mW2,mZ2))*(1.0+2.0*mW2*mZ2/(pow(M2-mW2-mZ2,2)))*pow(abs(c_gmunu),2);
+    // cout<<"WZ: c_gmunu: "<<c_gmunu<<" c_kmuqnu: "<<c_kmuqnu<<endl;
+    double Coefc12 = 2.0 + pow(M2 - mW2 - mZ2,2)/4.0/mW2/mZ2;
+    double Coefc1c2 = (-M2+mW2+mZ2)/2.0 - pow(-M2+mW2+mZ2,3)/8.0/mW2/mZ2;
+    double Coefc22 = pow(M2*M2 - 2.0*M2*(mW2+mZ2)+pow(mW2-mZ2,2),2)/16.0/mW2/mZ2;
+    double G = 1.0/(16.0*M_PI*pow(M,3))*sqrt(LAM(M2,mW2,mZ2))*(pow(abs(c_gmunu),2)*Coefc12 + 2.0*Re(c_gmunu*conj(c_kmuqnu))*Coefc1c2 + pow(abs(c_kmuqnu),2)*Coefc22);
     return G;
 #else
     return 0.0;

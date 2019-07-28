@@ -3653,7 +3653,7 @@ ComplexType CHHHpWm(double MHL2, double MHH2, double MHA2, double MHp2, double M
 
 }
 
-ComplexType CHHWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHHWW_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -3864,7 +3864,92 @@ ComplexType CHHWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 
 }
 
-ComplexType CHHZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHHWW_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*(1 + 5*Power(Cot(w),2))*Csc(w))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc0,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc1,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),3)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc1,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc1,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Csc(w))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc1,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc1,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),3)*Power(Csc(w),3))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc1,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc1,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc11,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm23 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm24 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm25 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm26 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm27 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm28 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),3)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm29 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm30 = (C0i(cc11,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm31 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm32 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm33 = (C0i(cc12,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm34 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm35 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm36 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm37 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm38 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm39 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),3)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm40 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm41 = (C0i(cc12,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm42 = (C0i(cc12,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Csc(w))/(1.0*(2*Power(Pi,2)));
+	ComplexType PVTerm43 = (C0i(cc12,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm44 = (C0i(cc12,m22,m12,m32,MHA2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm45 = (C0i(cc12,m22,m12,m32,MHH2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm46 = (C0i(cc12,m22,m12,m32,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm47 = (C0i(cc12,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 + 2*Power(MW,2))*Power(Cos(alpha - beta),3)*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm48 = (C0i(cc12,m22,m12,m32,MHL2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm49 = (C0i(cc12,m22,m12,m32,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm50 = (C0i(cc12,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 + 2*Power(MW,2))*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm51 = (C0i(cc12,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*((MHH2 + 18*Power(MW,2))*Power(Csc(w),3) + 2*Power(MW,2)*Csc(w)*Power(Sec(w),2)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm52 = (C0i(cc12,m32,m12,m22,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm53 = (C0i(cc12,m32,m12,m22,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm54 = (C0i(cc2,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm55 = (C0i(cc2,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*(-3 + Power(Cot(w),2))*Csc(w))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm56 = (C0i(cc2,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Csc(w))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm57 = (C0i(cc2,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Csc(beta)*Power(Csc(w),3)*Sin(alpha))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm58 = (C0i(cc2,m22,m12,m32,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm59 = (C0i(cc2,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),3)*Power(Csc(w),3))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm60 = (C0i(cc2,m22,m12,m32,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm61 = (C0i(cc2,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm62 = (C0i(cc2,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm63 = (C0i(cc2,m32,m12,m22,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm64 = (C0i(cc2,m32,m12,m22,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),2))/(1.0*(16*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58 + PVTerm59 + PVTerm60 + PVTerm61 + PVTerm62 + PVTerm63 + PVTerm64;
+
+}
+
+ComplexType CHHZZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -4064,6 +4149,85 @@ ComplexType CHHZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 	ComplexType PVTerm181 = (C0i(cc2,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*MT2*(9*(2*m12 + m22 - m32) - 4*(m12 + m22 - m32)*Cos(2*w) + 4*(m12 + m22 - m32)*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(96*MW*Power(Pi,2)));
 	ComplexType PVTerm182 = (C0i(cc2,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*(3*m12 + 2*m22 - 2*m32 + m12*Cos(2*w))*Power(Csc(w),3))/(1.0*(16*Power(Pi,2)));
 	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58 + PVTerm59 + PVTerm60 + PVTerm61 + PVTerm62 + PVTerm63 + PVTerm64 + PVTerm65 + PVTerm66 + PVTerm67 + PVTerm68 + PVTerm69 + PVTerm70 + PVTerm71 + PVTerm72 + PVTerm73 + PVTerm74 + PVTerm75 + PVTerm76 + PVTerm77 + PVTerm78 + PVTerm79 + PVTerm80 + PVTerm81 + PVTerm82 + PVTerm83 + PVTerm84 + PVTerm85 + PVTerm86 + PVTerm87 + PVTerm88 + PVTerm89 + PVTerm90 + PVTerm91 + PVTerm92 + PVTerm93 + PVTerm94 + PVTerm95 + PVTerm96 + PVTerm97 + PVTerm98 + PVTerm99 + PVTerm100 + PVTerm101 + PVTerm102 + PVTerm103 + PVTerm104 + PVTerm105 + PVTerm106 + PVTerm107 + PVTerm108 + PVTerm109 + PVTerm110 + PVTerm111 + PVTerm112 + PVTerm113 + PVTerm114 + PVTerm115 + PVTerm116 + PVTerm117 + PVTerm118 + PVTerm119 + PVTerm120 + PVTerm121 + PVTerm122 + PVTerm123 + PVTerm124 + PVTerm125 + PVTerm126 + PVTerm127 + PVTerm128 + PVTerm129 + PVTerm130 + PVTerm131 + PVTerm132 + PVTerm133 + PVTerm134 + PVTerm135 + PVTerm136 + PVTerm137 + PVTerm138 + PVTerm139 + PVTerm140 + PVTerm141 + PVTerm142 + PVTerm143 + PVTerm144 + PVTerm145 + PVTerm146 + PVTerm147 + PVTerm148 + PVTerm149 + PVTerm150 + PVTerm151 + PVTerm152 + PVTerm153 + PVTerm154 + PVTerm155 + PVTerm156 + PVTerm157 + PVTerm158 + PVTerm159 + PVTerm160 + PVTerm161 + PVTerm162 + PVTerm163 + PVTerm164 + PVTerm165 + PVTerm166 + PVTerm167 + PVTerm168 + PVTerm169 + PVTerm170 + PVTerm171 + PVTerm172 + PVTerm173 + PVTerm174 + PVTerm175 + PVTerm176 + PVTerm177 + PVTerm178 + PVTerm179 + PVTerm180 + PVTerm181 + PVTerm182;
+
+}
+
+ComplexType CHHZZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(96*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(96*MW*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc0,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*(2 + 2*Cos(2*w) + Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Power(Sin(alpha - beta),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc1,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),3)*Power(Csc(w),3)*Power(Sec(w),4))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc1,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(2*w),4)*Sin(alpha - beta)*Sin(2*(alpha - beta))*Sin(w))/(1.0*(2*Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc1,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Csc(beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc1,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MT2*Csc(beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc1,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Power(Sin(alpha - beta),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Power(Sin(alpha - beta),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm23 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*((-2*MHA2 + MHH2)*Sin(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm24 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm25 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm26 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm27 = (C0i(cc12,m22,m12,m32,MHA2,MHH2,MHH2))*1.0*(Complex(0,-3)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Power(Sin(alpha - beta),2)*(M2*Sin(alpha - 3*beta) + (-M2 + MHH2)*Sin(3*alpha - beta) + (2*M2 - 3*MHH2)*Sin(alpha + beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm28 = (C0i(cc12,m22,m12,m32,MHA2,MHH2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm29 = (C0i(cc12,m22,m12,m32,MHA2,MHL2,MHL2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),3)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm30 = (C0i(cc12,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),3)*Power(Csc(w),3)*Power(Sec(w),2)*(MHH2 + 2*Power(MW,2)*Power(Sec(w),2)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm31 = (C0i(cc12,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(MHH2 + 2*Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm32 = (C0i(cc12,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm33 = (C0i(cc12,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm34 = (C0i(cc12,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm35 = (C0i(cc12,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),4)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta))*Power(Sin(4*w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm36 = (C0i(cc12,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm37 = (C0i(cc12,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHH2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm38 = (C0i(cc12,m32,m12,m22,MHA2,MHH2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta)*Sin(2*(alpha - beta))*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm39 = (C0i(cc12,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm40 = (C0i(cc12,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm41 = (C0i(cc2,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),3)*Power(Csc(w),3)*Power(Sec(w),4))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm42 = (C0i(cc2,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(2*w),4)*Sin(alpha - beta)*Sin(2*(alpha - beta))*Sin(w))/(1.0*(2*Power(Pi,2)));
+	ComplexType PVTerm43 = (C0i(cc2,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm44 = (C0i(cc2,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm45 = (C0i(cc2,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm46 = (C0i(cc2,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),4)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta))*Power(Sin(4*w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm47 = (C0i(cc2,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm48 = (C0i(cc2,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHH2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm49 = (C0i(cc2,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm50 = (C0i(cc2,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm51 = (C0i(cc22,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm52 = (C0i(cc22,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm53 = (C0i(cc22,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm54 = (C0i(cc22,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),4)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta))*Power(Sin(4*w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm55 = (C0i(cc22,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm56 = (C0i(cc22,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*(MHH2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHH2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm57 = (C0i(cc22,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm58 = (C0i(cc22,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHH2 + Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),2))/(1.0*(32*MW*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58;
 
 }
 
@@ -5568,7 +5732,7 @@ ComplexType CHHuu(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 
 }
 
-ComplexType CHLWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHLWW_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -5779,7 +5943,92 @@ ComplexType CHLWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 
 }
 
-ComplexType CHLZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHLWW_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*(1 + 5*Power(Cot(w),2))*Csc(w)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc0,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc1,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),3)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc1,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc1,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Csc(w)*Sin(alpha - beta))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc1,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc1,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc1,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(w),3)*Power(Sin(alpha - beta),3))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc1,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc11,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm23 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm24 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),3)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm25 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm26 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm27 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm28 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm29 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm30 = (C0i(cc11,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm31 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm32 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm33 = (C0i(cc12,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm34 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm35 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),3)*Power(Sin(alpha - beta),3)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm36 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm37 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm38 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm39 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MHp2))*1.0*(Complex(0,3)*Power(EL,3)*Power(Cos(alpha - beta),2)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm40 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MW2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm41 = (C0i(cc12,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 10*Power(MW,2) + 8*Power(MW,2)*Cos(2*w))*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm42 = (C0i(cc12,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Csc(w)*Sin(alpha - beta))/(1.0*(2*Power(Pi,2)));
+	ComplexType PVTerm43 = (C0i(cc12,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm44 = (C0i(cc12,m22,m12,m32,MHA2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm45 = (C0i(cc12,m22,m12,m32,MHH2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm46 = (C0i(cc12,m22,m12,m32,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm47 = (C0i(cc12,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 + 2*Power(MW,2))*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm48 = (C0i(cc12,m22,m12,m32,MHL2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm49 = (C0i(cc12,m22,m12,m32,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm50 = (C0i(cc12,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 + 2*Power(MW,2))*Power(Csc(w),3)*Power(Sin(alpha - beta),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm51 = (C0i(cc12,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*((MHL2 + 18*Power(MW,2))*Power(Csc(w),3) + 2*Power(MW,2)*Csc(w)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm52 = (C0i(cc12,m32,m12,m22,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm53 = (C0i(cc12,m32,m12,m22,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm54 = (C0i(cc2,m12,m32,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm55 = (C0i(cc2,m12,m32,m22,MW2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*(-3 + Power(Cot(w),2))*Csc(w)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm56 = (C0i(cc2,m22,m12,m32,0,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Csc(w)*Sin(alpha - beta))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm57 = (C0i(cc2,m22,m12,m32,MB2,MT2,MT2))*1.0*(Complex(0,-3)*Power(EL,3)*MT2*Cos(alpha)*Csc(beta)*Power(Csc(w),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm58 = (C0i(cc2,m22,m12,m32,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm59 = (C0i(cc2,m22,m12,m32,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm60 = (C0i(cc2,m22,m12,m32,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm61 = (C0i(cc2,m22,m12,m32,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(w),3)*Power(Sin(alpha - beta),3))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm62 = (C0i(cc2,m22,m12,m32,MW2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Csc(w)*Power(Csc(2*w),2)*Sin(alpha - beta))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm63 = (C0i(cc2,m32,m12,m22,MHH2,MHp2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm64 = (C0i(cc2,m32,m12,m22,MHL2,MHp2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58 + PVTerm59 + PVTerm60 + PVTerm61 + PVTerm62 + PVTerm63 + PVTerm64;
+
+}
+
+ComplexType CHLZZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -5979,6 +6228,85 @@ ComplexType CHLZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 	ComplexType PVTerm181 = (C0i(cc2,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*MT2*Cos(alpha)*(9*(2*m12 + m22 - m32) - 4*(m12 + m22 - m32)*Cos(2*w) + 4*(m12 + m22 - m32)*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(96*MW*Power(Pi,2)));
 	ComplexType PVTerm182 = (C0i(cc2,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*(3*m12 + 2*m22 - 2*m32 + m12*Cos(2*w))*Power(Csc(w),3)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
 	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58 + PVTerm59 + PVTerm60 + PVTerm61 + PVTerm62 + PVTerm63 + PVTerm64 + PVTerm65 + PVTerm66 + PVTerm67 + PVTerm68 + PVTerm69 + PVTerm70 + PVTerm71 + PVTerm72 + PVTerm73 + PVTerm74 + PVTerm75 + PVTerm76 + PVTerm77 + PVTerm78 + PVTerm79 + PVTerm80 + PVTerm81 + PVTerm82 + PVTerm83 + PVTerm84 + PVTerm85 + PVTerm86 + PVTerm87 + PVTerm88 + PVTerm89 + PVTerm90 + PVTerm91 + PVTerm92 + PVTerm93 + PVTerm94 + PVTerm95 + PVTerm96 + PVTerm97 + PVTerm98 + PVTerm99 + PVTerm100 + PVTerm101 + PVTerm102 + PVTerm103 + PVTerm104 + PVTerm105 + PVTerm106 + PVTerm107 + PVTerm108 + PVTerm109 + PVTerm110 + PVTerm111 + PVTerm112 + PVTerm113 + PVTerm114 + PVTerm115 + PVTerm116 + PVTerm117 + PVTerm118 + PVTerm119 + PVTerm120 + PVTerm121 + PVTerm122 + PVTerm123 + PVTerm124 + PVTerm125 + PVTerm126 + PVTerm127 + PVTerm128 + PVTerm129 + PVTerm130 + PVTerm131 + PVTerm132 + PVTerm133 + PVTerm134 + PVTerm135 + PVTerm136 + PVTerm137 + PVTerm138 + PVTerm139 + PVTerm140 + PVTerm141 + PVTerm142 + PVTerm143 + PVTerm144 + PVTerm145 + PVTerm146 + PVTerm147 + PVTerm148 + PVTerm149 + PVTerm150 + PVTerm151 + PVTerm152 + PVTerm153 + PVTerm154 + PVTerm155 + PVTerm156 + PVTerm157 + PVTerm158 + PVTerm159 + PVTerm160 + PVTerm161 + PVTerm162 + PVTerm163 + PVTerm164 + PVTerm165 + PVTerm166 + PVTerm167 + PVTerm168 + PVTerm169 + PVTerm170 + PVTerm171 + PVTerm172 + PVTerm173 + PVTerm174 + PVTerm175 + PVTerm176 + PVTerm177 + PVTerm178 + PVTerm179 + PVTerm180 + PVTerm181 + PVTerm182;
+
+}
+
+ComplexType CHLZZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cos(alpha)*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(96*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*Cos(alpha)*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(96*MW*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc0,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*(2 + 2*Cos(2*w) + Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha - beta))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc1,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc1,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc1,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc1,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc1,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),4)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc1,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(2*w),4)*Power(Sin(alpha - beta),3)*Sin(w))/(1.0*(Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc1,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cos(alpha)*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc1,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MT2*Cos(alpha)*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc1,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha - beta))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc11,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc11,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc11,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc11,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc11,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc12,m12,m22,m32,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm23 = (C0i(cc12,m12,m32,m22,MHA2,MHA2,MHL2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*((-2*MHA2 + MHL2)*Cos(alpha - 3*beta) + (-4*M2 + 2*MHA2 + 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm24 = (C0i(cc12,m12,m32,m22,MHH2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm25 = (C0i(cc12,m12,m32,m22,MHH2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm26 = (C0i(cc12,m12,m32,m22,MHL2,MHL2,MZ2))*1.0*(Complex(0,3)*Power(EL,3)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Power(Sin(alpha - beta),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm27 = (C0i(cc12,m22,m12,m32,MHA2,MHH2,MHH2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(2*beta)*Csc(w)*Power(Csc(2*w),2)*Power(Sin(alpha - beta),3)*((3*M2 - 2*MHH2 - MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm28 = (C0i(cc12,m22,m12,m32,MHA2,MHH2,MHL2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm29 = (C0i(cc12,m22,m12,m32,MHA2,MHL2,MHL2))*1.0*(Complex(0,-3)*Power(EL,3)*Power(Cos(alpha - beta),2)*(M2*Cos(alpha - 3*beta) + (M2 - MHL2)*Cos(3*alpha - beta) + (2*M2 - 3*MHL2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm30 = (C0i(cc12,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(MHL2 + 2*Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm31 = (C0i(cc12,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Csc(w),3)*Power(Sec(w),2)*(MHL2 + 2*Power(MW,2)*Power(Sec(w),2))*Power(Sin(alpha - beta),3))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm32 = (C0i(cc12,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cos(alpha)*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm33 = (C0i(cc12,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm34 = (C0i(cc12,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm35 = (C0i(cc12,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Power(Cos(2*w),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm36 = (C0i(cc12,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*Cos(alpha)*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm37 = (C0i(cc12,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHL2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm38 = (C0i(cc12,m32,m12,m22,MHA2,MHH2,MHL2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2)*Sin(alpha - beta)*((-3*M2 + MHH2 + 2*MHL2)*Sin(2*alpha) + M2*Sin(2*beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm39 = (C0i(cc12,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm40 = (C0i(cc12,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm41 = (C0i(cc2,m22,m12,m32,MHH2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),4)*Sin(alpha - beta))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm42 = (C0i(cc2,m22,m12,m32,MHL2,MZ2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(2*w),4)*Power(Sin(alpha - beta),3)*Sin(w))/(1.0*(Power(Pi,2)));
+	ComplexType PVTerm43 = (C0i(cc2,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cos(alpha)*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm44 = (C0i(cc2,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm45 = (C0i(cc2,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm46 = (C0i(cc2,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Power(Cos(2*w),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm47 = (C0i(cc2,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*Cos(alpha)*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm48 = (C0i(cc2,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHL2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm49 = (C0i(cc2,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm50 = (C0i(cc2,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(MHA2 - MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm51 = (C0i(cc22,m22,m32,m12,MB2,MB2,MB2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cos(alpha)*(6 + 2*Cos(2*w) + Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm52 = (C0i(cc22,m22,m32,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm53 = (C0i(cc22,m22,m32,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm54 = (C0i(cc22,m22,m32,m12,MHp2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Power(Cos(2*w),2)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Power(Sec(w),2))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm55 = (C0i(cc22,m22,m32,m12,MT2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MT2*Cos(alpha)*(9 - 4*Cos(2*w) + 4*Cos(4*w))*Csc(beta)*Power(Csc(w),3)*Power(Sec(w),2))/(1.0*(24*MW*Power(Pi,2)));
+	ComplexType PVTerm56 = (C0i(cc22,m22,m32,m12,MW2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 + 14*Power(MW,2) + 16*Power(MW,2)*Cos(2*w) + (MHL2 + 6*Power(MW,2))*Cos(4*w))*Power(Csc(w),3)*Power(Sec(w),2)*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm57 = (C0i(cc22,m32,m22,m12,MHA2,MHH2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm58 = (C0i(cc22,m32,m22,m12,MHA2,MHL2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*Power(Cos(alpha - beta),2)*Power(Csc(w),3)*Power(Sec(w),2)*(-MHA2 + MHL2 + Power(MW,2)*Power(Sec(w),2))*Sin(alpha - beta))/(1.0*(32*MW*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57 + PVTerm58;
 
 }
 
@@ -8240,7 +8568,7 @@ ComplexType CHpHLWp(double MHL2, double MHH2, double MHA2, double MHp2, double M
 
 }
 
-ComplexType CHpWpGa(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHpWpGa_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -8301,7 +8629,50 @@ ComplexType CHpWpGa(double MHL2, double MHH2, double MHA2, double MHp2, double M
 
 }
 
-ComplexType CHpWpZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+ComplexType CHpWpGa_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*MB2*Cot(beta)*Power(Csc(w),2))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cot(beta)*Power(Csc(w),2))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc1,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*(MB2 + MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc12,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*(MB2 - MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(4*MW*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc12,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),2)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc12,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc12,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),2)*Sec(beta))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc12,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc12,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*(MB2 - MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc2,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*(3*MB2 - MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(8*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc2,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),2)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc2,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc2,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),2)*Sec(beta))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc2,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc2,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*(MB2 + MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc22,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*(MB2 - MT2)*Cot(beta)*Power(Csc(w),2))/(1.0*(4*MW*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc22,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Csc(2*beta)*Power(Csc(w),2)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc22,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc22,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),2)*Sec(beta))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc22,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(32*MW*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22;
+
+}
+
+ComplexType CHpWpZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
 {
 	double EL = sm.get_e();
 	double CW = sm.get_costw();
@@ -8376,6 +8747,70 @@ ComplexType CHpWpZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2
 	ComplexType PVTerm56 = (C0i(cc2,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(m12 - m22 + m32)*MW*Cot(w)*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(64*Power(Pi,2)));
 	ComplexType PVTerm57 = (C0i(cc2,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*Cot(beta)*Csc(w)*(2*(-(m22*(MB2 - 3*MT2)) + m12*(MB2 + MT2) - m32*(MB2 + MT2)) + 3*(2*m22*MB2 - m12*MT2 - 3*m22*MT2 + m32*MT2)*Power(Csc(w),2))*Sec(w))/(1.0*(64*MW*Power(Pi,2)));
 	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43 + PVTerm44 + PVTerm45 + PVTerm46 + PVTerm47 + PVTerm48 + PVTerm49 + PVTerm50 + PVTerm51 + PVTerm52 + PVTerm53 + PVTerm54 + PVTerm55 + PVTerm56 + PVTerm57;
+
+}
+
+ComplexType CHpWpZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm)
+{
+	double EL = sm.get_e();
+	double CW = sm.get_costw();
+	double SW = sm.get_sintw();
+	double CW2 = CW*CW;
+	double SW2 = SW*SW;
+	double w = acos(CW);
+	double Alfa = sm.get_alpha0();
+	double MZ = sm.get_vmass(2);
+	double MW = sm.get_vmass(3);
+	double MZ2 = MZ*MZ;
+	double MW2 = MW*MW;
+	double MT2 = pow(sm.get_qmass_pole(6),2);
+	double MB2 = pow(sm.get_qmass_pole(5),2);
+	std::complex <double> I(0.0,1.0);
+	ComplexType FreeTerm = 0;
+	ComplexType PVTerm1 = (C0i(cc0,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*(1 + 2*Cos(2*w))*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm2 = (C0i(cc0,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*MB2*Cot(beta)*Csc(w)*Sec(w))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm3 = (C0i(cc1,m12,m22,m32,MHH2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm4 = (C0i(cc1,m12,m22,m32,MHL2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm5 = (C0i(cc1,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*Cot(beta)*Csc(w)*(4*(MB2 + MT2) - 3*MB2*Power(Csc(w),2))*Sec(w))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm6 = (C0i(cc1,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cot(w)*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm7 = (C0i(cc1,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cot(w)*Power(Csc(w),2)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm8 = (C0i(cc1,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,3)*Power(EL,3)*MB2*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm9 = (C0i(cc11,m12,m22,m32,MHH2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm10 = (C0i(cc11,m12,m22,m32,MHL2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm11 = (C0i(cc12,m12,m22,m32,MHH2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm12 = (C0i(cc12,m12,m22,m32,MHL2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm13 = (C0i(cc12,m22,m12,m32,MHH2,MHp2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cot(2*w)*Power(Csc(2*w),2)*Sin(2*(alpha - beta)))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm14 = (C0i(cc12,m22,m12,m32,MHL2,MHp2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cot(2*w)*Power(Csc(2*w),2)*Sin(2*(alpha - beta)))/(1.0*(8*Power(Pi,2)));
+	ComplexType PVTerm15 = (C0i(cc12,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*(MB2 - MT2)*(1 + 2*Cos(2*w))*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm16 = (C0i(cc12,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm17 = (C0i(cc12,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm18 = (C0i(cc12,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm19 = (C0i(cc12,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm20 = (C0i(cc12,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*(MB2 - MT2)*(2 + Cos(2*w))*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm21 = (C0i(cc12,m32,m12,m22,MHA2,MHH2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm22 = (C0i(cc12,m32,m12,m22,MHA2,MHL2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm23 = (C0i(cc12,m32,m22,m12,MHA2,MHH2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHA2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm24 = (C0i(cc12,m32,m22,m12,MHA2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHA2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm25 = (C0i(cc2,m12,m22,m32,MHH2,MW2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm26 = (C0i(cc2,m12,m22,m32,MHL2,MW2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(16*Power(Pi,2)));
+	ComplexType PVTerm27 = (C0i(cc2,m22,m12,m32,MHH2,MHp2,MZ2))*1.0*(Complex(0,1)*Power(EL,3)*MW*Cot(2*w)*Power(Csc(2*w),2)*Sin(2*(alpha - beta)))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm28 = (C0i(cc2,m22,m12,m32,MHL2,MHp2,MZ2))*1.0*(Complex(0,-1)*Power(EL,3)*MW*Cot(2*w)*Power(Csc(2*w),2)*Sin(2*(alpha - beta)))/(1.0*(4*Power(Pi,2)));
+	ComplexType PVTerm29 = (C0i(cc2,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*(3*MB2 - MT2)*(1 + 2*Cos(2*w))*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm30 = (C0i(cc2,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm31 = (C0i(cc2,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHH2 - MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm32 = (C0i(cc2,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm33 = (C0i(cc2,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHL2 - MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm34 = (C0i(cc2,m32,m12,m22,MB2,MB2,MT2))*1.0*(Complex(0,-1)*Power(EL,3)*Cot(beta)*Csc(w)*(-2*(MB2 + MT2) + 3*MT2*Power(Csc(w),2))*Sec(w))/(1.0*(32*MW*Power(Pi,2)));
+	ComplexType PVTerm35 = (C0i(cc2,m32,m22,m12,MHA2,MHH2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(MHA2 - MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm36 = (C0i(cc2,m32,m22,m12,MHA2,MHL2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(MHA2 - MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm37 = (C0i(cc22,m22,m32,m12,MB2,MT2,MT2))*1.0*(Complex(0,1)*Power(EL,3)*(MB2 - MT2)*(1 + 2*Cos(2*w))*Cot(beta)*Power(Csc(w),3)*Sec(w))/(1.0*(16*MW*Power(Pi,2)));
+	ComplexType PVTerm38 = (C0i(cc22,m22,m32,m12,MHH2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w)*Sin(alpha - beta)*((MHH2 - 2*MHp2)*Sin(alpha - 3*beta) + (-4*M2 + 3*MHH2 + 2*MHp2)*Sin(alpha + beta)))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm39 = (C0i(cc22,m22,m32,m12,MHH2,MW2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHH2 + MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm40 = (C0i(cc22,m22,m32,m12,MHL2,MHp2,MHp2))*1.0*(Complex(0,-1)*Power(EL,3)*Cos(alpha - beta)*((MHL2 - 2*MHp2)*Cos(alpha - 3*beta) + (-4*M2 + 3*MHL2 + 2*MHp2)*Cos(alpha + beta))*Cos(2*w)*Csc(beta)*Power(Csc(w),3)*Sec(beta)*Sec(w))/(1.0*(128*MW*Power(Pi,2)));
+	ComplexType PVTerm41 = (C0i(cc22,m22,m32,m12,MHL2,MW2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHL2 + MHp2 + Power(MW,2))*Cos(2*w)*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm42 = (C0i(cc22,m32,m22,m12,MHA2,MHH2,MW2))*1.0*(Complex(0,1)*Power(EL,3)*(-MHA2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	ComplexType PVTerm43 = (C0i(cc22,m32,m22,m12,MHA2,MHL2,MW2))*1.0*(Complex(0,-1)*Power(EL,3)*(-MHA2 + MHp2 + Power(MW,2))*Power(Csc(w),3)*Sec(w)*Sin(2*(alpha - beta)))/(1.0*(64*MW*Power(Pi,2)));
+	return FreeTerm + PVTerm1 + PVTerm2 + PVTerm3 + PVTerm4 + PVTerm5 + PVTerm6 + PVTerm7 + PVTerm8 + PVTerm9 + PVTerm10 + PVTerm11 + PVTerm12 + PVTerm13 + PVTerm14 + PVTerm15 + PVTerm16 + PVTerm17 + PVTerm18 + PVTerm19 + PVTerm20 + PVTerm21 + PVTerm22 + PVTerm23 + PVTerm24 + PVTerm25 + PVTerm26 + PVTerm27 + PVTerm28 + PVTerm29 + PVTerm30 + PVTerm31 + PVTerm32 + PVTerm33 + PVTerm34 + PVTerm35 + PVTerm36 + PVTerm37 + PVTerm38 + PVTerm39 + PVTerm40 + PVTerm41 + PVTerm42 + PVTerm43;
 
 }
 

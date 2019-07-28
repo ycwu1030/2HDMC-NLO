@@ -49,9 +49,13 @@ ComplexType CHHHpHm(double MHL2, double MHH2, double MHA2, double MHp2, double M
 
 ComplexType CHHHpWm(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHHWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHHWW_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHHZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHHWW_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHHZZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHHZZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
 ComplexType CHHbb(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
@@ -71,9 +75,13 @@ ComplexType CHHtt(double MHL2, double MHH2, double MHA2, double MHp2, double M2,
 
 ComplexType CHHuu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHLWW(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHLWW_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHLZZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHLWW_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLZZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHLZZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
 ComplexType CHLbb(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
@@ -99,9 +107,13 @@ ComplexType CHpHHWp(double MHL2, double MHH2, double MHA2, double MHp2, double M
 
 ComplexType CHpHLWp(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHpWpGa(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHpWpGa_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
-ComplexType CHpWpZ(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+ComplexType CHpWpGa_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpWpZ_gmunu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
+
+ComplexType CHpWpZ_kmuqnu(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 
 ComplexType CHpcs_PL(double MHL2, double MHH2, double MHA2, double MHp2, double M2, double beta, double alpha, double m12, double m22, double m32, SM sm);
 

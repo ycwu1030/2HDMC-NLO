@@ -15,6 +15,7 @@ CFLAGS= -Wall $(DEBUG) $(OPT) -I$(LT)/../include
 CFLAGS+=-DNLOCOUPLINGS
 
 OBJDIR=lib
+# mkd=$(shell mkdir -p $(OBJDIR))
 LIBDIR=$(OBJDIR)
 SOURCES=THDM.cpp SM.cpp DecayTable.cpp Constraints.cpp Util.cpp runTHDM.cpp CouplingFunctionTypeI.cpp CouplingFunctionTypeII.cpp CouplingFunctionTypeLS.cpp CouplingFunctionTypeFL.cpp 
 OBJECTS=$(SOURCES:.cpp=.o)
@@ -31,14 +32,12 @@ PROG=CalcPhys.x CalcGen.x CalcHiggs.x CalcHybrid.x CalcHMSSM.x CalcMSSM.x CalcIn
 #LDFLAGS+=-L$(LIBDIR) -lHS -lHB -lgfortran
 #SOURCES+=HBHS.cpp
 
-.PHONY: directory lib clean distclean
+.PHONY: lib clean distclean
 
 all: lib $(PROG)
 
-directory: $(OBJDIR)
+$(OBJDIR)/%.o : %.cpp %.h
 	@ mkdir -p $(OBJDIR)
-
-$(OBJDIR)/%.o : %.cpp %.h directory
 	$(CC) $(CFLAGS) -c $< -o $@
 
 lib: $(addprefix $(LIBDIR)/, $(LIB))

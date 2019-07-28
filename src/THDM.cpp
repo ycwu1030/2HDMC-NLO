@@ -184,6 +184,23 @@ int thdmc_set_param(int key, double smpara[nsmpara], double para[npara], double 
 THDM::THDM() {
   init();
 }
+// Added by Y. Wu
+// THDM::~THDM() {
+//   gsl_matrix_free(kappa_D);
+//   gsl_matrix_free(kappa_U);
+//   gsl_matrix_free(kappa_L);
+//   gsl_matrix_free(rho_D);
+//   gsl_matrix_free(rho_U);
+//   gsl_matrix_free(rho_L);
+//   gsl_matrix_free(rho_N);
+
+//   gsl_matrix_free(rho_D_NLO);
+//   gsl_matrix_free(rho_U_NLO);
+//   gsl_matrix_free(RD_NLO);
+//   gsl_matrix_free(RU_NLO);
+
+// }
+// End
 
 
 void THDM::init() {
@@ -219,6 +236,17 @@ void THDM::init() {
   gsl_matrix_set_zero(rho_U);
   gsl_matrix_set_zero(rho_L);
   gsl_matrix_set_zero(rho_N);
+
+// Added by Y. Wu
+  rho_D_NLO = gsl_matrix_alloc(3,3);
+  rho_U_NLO = gsl_matrix_alloc(3,3);
+  RD_NLO = gsl_matrix_alloc(3,3);
+  RU_NLO = gsl_matrix_alloc(3,3);
+
+  gsl_matrix_set_zero(rho_D_NLO);
+  gsl_matrix_set_zero(rho_U_NLO);
+  gsl_matrix_set_zero(RD_NLO);
+  gsl_matrix_set_zero(RU_NLO);
 }
 
 
@@ -1513,33 +1541,37 @@ void THDM::get_coupling_hdu_NLO(int h,int d,int u,complex <double> &cs, complex 
 // Not yet implement, using LO result instead.
   complex <double> I(0.0,1.0);
 
-  complex <double> x(0.,0.);
-  complex <double> y(0.,0.);
+  complex <double> pl(0.,0.);
+  complex <double> pr(0.,0.);
+  complex <double> rd(0.,0.);
+  complex <double> ru(0.,0.);
+  CFunc_NLO FCoup_PL,FCoup_PR;
+  double mup_c,mdo_c;
+  int status;
   cs = 0.;
   cp = 0.;
 
-  gsl_matrix* ckm = sm.get_CKM_matrix();
+  // gsl_matrix* ckm = sm.get_CKM_matrix();
+  double ckmud = sm.get_CKM_element(u-1,d-1);
 
   if (h!=4) return;
   
   double mHp = get_hmass(4);
 
-  if ((u<=3)&&(u>=1)&&(d<=3)&&(d>=1)) {    
-    gsl_matrix *RD = gsl_matrix_alloc(3,3); 
-    gsl_matrix *RU = gsl_matrix_alloc(3,3);
+  if ((u<=3)&&(u>=1)&&(d<=3)&&(d>=1)) {  
+    status = GetNLOFuncSFFC(4,UPID+u,DOID+u,yukawas_type,FCoup_PL,FCoup_PR);
+    if (!Updated) store_param_phys();
+    mup_c = sm.get_umass_pole(u);
+    mdo_c = sm.get_dmass_pole(u);
+    pl = FCoup_PL(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,mup_c*mup_c,mdo_c*mdo_c,sm);
+    status = GetNLOFuncSFFC(4,UPID+d,DOID+d,yukawas_type,FCoup_PL,FCoup_PR);
+    mup_c = sm.get_umass_pole(d);
+    mdo_c = sm.get_dmass_pole(d);
+    pr = FCoup_PL(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,mup_c*mup_c,mdo_c*mdo_c,sm);
+    
 
-    gsl_matrix_view A = gsl_matrix_submatrix(ckm,0,0,3,3);
-    gsl_matrix_view B = gsl_matrix_submatrix(rho_D,0,0,3,3);
-    gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,1.0, &A.matrix, &B.matrix,0.0,RD);
-    B = gsl_matrix_submatrix(rho_U,0,0,3,3);
-    gsl_blas_dgemm(CblasConjTrans,CblasNoTrans,1.0, &B.matrix, &A.matrix,0.0,RU);
-  
-    double rd = gsl_matrix_get(RD,u-1,d-1);
-    double ru = gsl_matrix_get(RU,u-1,d-1);
-    gsl_matrix_free(RD);
-    gsl_matrix_free(RU);
-    gsl_matrix_free(ckm);
-
+    rd = pr*ckmud;
+    ru = -pl*ckmud;
 
     double mdms  = sm.get_dmass_MSbar(d);
     double Qinit  = mdms;
@@ -1601,14 +1633,22 @@ void THDM::get_coupling_hln_NLO(int h,int l,int n,complex <double> &cs, complex 
 
   complex <double> x(0.,0.);
   complex <double> y(0.,0.);
+  complex <double> rl(0.,0.);
+  complex <double> rn(0.,0.);
+  CFunc_NLO FCoup_PL,FCoup_PR;
+  double ml;
+  int status;
   cs = 0.;
   cp = 0.;
 
   if (h!=4) return;
-  
+  if (l!=n) return;
   if ((n<=3)&&(n>=1)&&(l<=3)&&(l>=1)) {    
-    double rl = gsl_matrix_get(rho_L,n-1,l-1);
-    double rn = gsl_matrix_get(rho_N,n-1,l-1);
+    status = GetNLOFuncSFFC(4,LEID+l,NUID+n,yukawas_type,FCoup_PL,FCoup_PR);
+    ml = sm.get_lmass_pole(l);
+    if (!Updated) store_param_phys();
+    rl = FCoup_PR(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,ml*ml,0.0,sm);//gsl_matrix_get(rho_L,n-1,l-1);
+    rn = -FCoup_PL(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,ml*ml,0.0,sm);//gsl_matrix_get(rho_N,n-1,l-1);
 
     cs = -I*0.5*(rl-rn);
     cp = -I*0.5*(rl+rn);
@@ -1799,22 +1839,29 @@ void THDM::get_coupling_vvh(int v1,int v2,int h,complex <double> &c) {
 }
 
 
-void THDM::get_coupling_vvh_NLO(int v1,int v2,int h,complex <double> &c) {  
-  c=0;
+void THDM::get_coupling_vvh_NLO(int v1,int v2,int h,complex <double> &c_gmunu, complex <double> &c_kmuqnu) {  
+  c_gmunu=0.;
+  c_kmuqnu=0.;
   
-  CFunc_NLO FCoup;
-  int status = GetNLOFuncSVV(h,v1,v2,yukawas_type,FCoup);
+  CFunc_NLO FCoup_gmunu, FCoup_kmuqnu;
+  int status = GetNLOFuncSVV(h,v1,v2,yukawas_type,FCoup_gmunu, FCoup_kmuqnu);
   if (status == NOTIMPLEMENT)
   {
-      get_coupling_vvh(v1,v2,h,c);
+      get_coupling_vvh(v1,v2,h,c_gmunu);
       return;
   }
   if (!Updated) store_param_phys();
   double mh1 = get_hmass(h);
   double mv1 = sm.get_vmass(v1);
   double mv2 = sm.get_vmass(v2);
-  c = FCoup(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,mh1*mh1,mv1*mv1,mv2*mv2,sm);
-
+  if (mv1 + mv2 > mh1)
+  {
+      mv1 = mh1/2.0-1.0;
+      mv2 = mh1/2.0-1.0;
+  }
+  c_gmunu = FCoup_gmunu(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,mh1*mh1,mv1*mv1,mv2*mv2,sm);
+  c_kmuqnu = FCoup_kmuqnu(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,mh1*mh1,mv1*mv1,mv2*mv2,sm);
+  // cout<<"hv1v2: "<<h<<" "<<v1<<" "<<v2<<" c_gmunu: "<<c_gmunu<<" c_kmuqnu: "<<c_kmuqnu<<endl;
 }
 
 void THDM::get_coupling_vvhh(int v1,int v2,int h1,int h2,complex <double> &c) {
@@ -3194,15 +3241,70 @@ void THDM::store_param_phys() {
       Updated = true;
 }
 
+// void THDM::store_Hpmff_Couplings() {
+//     gsl_matrix *ckm = sm.get_CKM_matrix();
+//     CFunc_NLO FCoup_PL, FCoup_PR;
+//     complex <double> PL, PR;
+//     double mup,mdo;
+//   int status; = GetNLOFuncSSS(h1,h2,h3,yukawas_type,FCoup);
+//   if (status == NOTIMPLEMENT)
+//   {
+//       get_coupling_hhh(h1,h2,h3,c);
+//       return;
+//   }
+//     for (int i = 1; i <= 3; ++i)
+//     {
+//         status = GetNLOFuncSFFC(4,UPID+i,DOID+i,FCoup_PL,FCoup_PR);
+//         if (status == NLOGOOD)
+//         {
+//             mup = sm.get_umass_pole(i);
+//             mdo = sm.get_dmass_pole(i);
+//             PL = FCoup_PL(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,mup*mup,mdo*mdo,sm);
+//             PR = FCoup_PR(L_MHL2,L_MHH2,L_MHA2,L_MHP2,L_M2,L_beta,L_alp,L_MHP2,mup*mup,mdo*mdo,sm);
+//             gsl_matrix_set(rho_U_NLO,i-1,i-1,-1.0*)
+//         }
+//     }
+
+//     gsl_matrix_view A = gsl_matrix_submatrix(ckm,0,0,3,3);
+//     gsl_matrix_view B = gsl_matrix_submatrix(rho_D,0,0,3,3);
+//     gsl_blas_dgemm(CblasNoTrans,CblasNoTrans,1.0, &A.matrix, &B.matrix,0.0,RD);
+//     B = gsl_matrix_submatrix(rho_U,0,0,3,3);
+//     gsl_blas_dgemm(CblasConjTrans,CblasNoTrans,1.0, &B.matrix, &A.matrix,0.0,RU);
+  
+//     // double rd = gsl_matrix_get(RD,u-1,d-1);
+//     // double ru = gsl_matrix_get(RU,u-1,d-1);
+//     // gsl_matrix_free(RD);
+//     // gsl_matrix_free(RU);
+//     gsl_matrix_free(ckm);
+//     HpmUpdated = true;
+// }
+
 int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
     if (type == 1)
     {
         if (S1 == 1)
         {
-            return NOTIMPLEMENT;
+            if (F1 != F2)
+            {
+                return NOTIMPLEMENT;
+            }
+            else
+            {
+                if (F1 == 11) {func = TypeI::CHLuu; return NLOGOOD;}
+                if (F1 == 12) {func = TypeI::CHLcc; return NLOGOOD;}
+                if (F1 == 13) {func = TypeI::CHLtt; return NLOGOOD;}
+                if (F1 == 21) {func = TypeI::CHLdd; return NLOGOOD;}
+                if (F1 == 22) {func = TypeI::CHLss; return NLOGOOD;}
+                if (F1 == 23) {func = TypeI::CHLbb; return NLOGOOD;}
+                if (F1 == 31) {func = TypeI::CHLee; return NLOGOOD;}
+                if (F1 == 32) {func = TypeI::CHLmm; return NLOGOOD;}
+                if (F1 == 33) {func = TypeI::CHLtata; return NLOGOOD;}
+                return NOTIMPLEMENT;
+            }
         }
         else if (S1 == 4)
         {
+            std::cerr<<"Please use GetNLOFuncSFFC for charged scalar"<<std::endl;
             return NOTIMPLEMENT;
         }
         else if (S1 == 2)
@@ -3254,10 +3356,27 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
     {
         if (S1 == 1)
         {
-            return NOTIMPLEMENT;
+            if (F1 != F2)
+            {
+                return NOTIMPLEMENT;
+            }
+            else
+            {
+                if (F1 == 11) {func = TypeII::CHLuu; return NLOGOOD;}
+                if (F1 == 12) {func = TypeII::CHLcc; return NLOGOOD;}
+                if (F1 == 13) {func = TypeII::CHLtt; return NLOGOOD;}
+                if (F1 == 21) {func = TypeII::CHLdd; return NLOGOOD;}
+                if (F1 == 22) {func = TypeII::CHLss; return NLOGOOD;}
+                if (F1 == 23) {func = TypeII::CHLbb; return NLOGOOD;}
+                if (F1 == 31) {func = TypeII::CHLee; return NLOGOOD;}
+                if (F1 == 32) {func = TypeII::CHLmm; return NLOGOOD;}
+                if (F1 == 33) {func = TypeII::CHLtata; return NLOGOOD;}
+                return NOTIMPLEMENT;
+            }
         }
         else if (S1 == 4)
         {
+            std::cerr<<"Please use GetNLOFuncSFFC for charged scalar"<<std::endl;
             return NOTIMPLEMENT;
         }
         else if (S1 == 2)
@@ -3309,10 +3428,27 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
     {
         if (S1 == 1)
         {
-            return NOTIMPLEMENT;
+            if (F1 != F2)
+            {
+                return NOTIMPLEMENT;
+            }
+            else
+            {
+                if (F1 == 11) {func = TypeLS::CHLuu; return NLOGOOD;}
+                if (F1 == 12) {func = TypeLS::CHLcc; return NLOGOOD;}
+                if (F1 == 13) {func = TypeLS::CHLtt; return NLOGOOD;}
+                if (F1 == 21) {func = TypeLS::CHLdd; return NLOGOOD;}
+                if (F1 == 22) {func = TypeLS::CHLss; return NLOGOOD;}
+                if (F1 == 23) {func = TypeLS::CHLbb; return NLOGOOD;}
+                if (F1 == 31) {func = TypeLS::CHLee; return NLOGOOD;}
+                if (F1 == 32) {func = TypeLS::CHLmm; return NLOGOOD;}
+                if (F1 == 33) {func = TypeLS::CHLtata; return NLOGOOD;}
+                return NOTIMPLEMENT;
+            }
         }
         else if (S1 == 4)
         {
+            std::cerr<<"Please use GetNLOFuncSFFC for charged scalar"<<std::endl;
             return NOTIMPLEMENT;
         }
         else if (S1 == 2)
@@ -3364,10 +3500,27 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
     {
         if (S1 == 1)
         {
-            return NOTIMPLEMENT;
+            if (F1 != F2)
+            {
+                return NOTIMPLEMENT;
+            }
+            else
+            {
+                if (F1 == 11) {func = TypeFL::CHLuu; return NLOGOOD;}
+                if (F1 == 12) {func = TypeFL::CHLcc; return NLOGOOD;}
+                if (F1 == 13) {func = TypeFL::CHLtt; return NLOGOOD;}
+                if (F1 == 21) {func = TypeFL::CHLdd; return NLOGOOD;}
+                if (F1 == 22) {func = TypeFL::CHLss; return NLOGOOD;}
+                if (F1 == 23) {func = TypeFL::CHLbb; return NLOGOOD;}
+                if (F1 == 31) {func = TypeFL::CHLee; return NLOGOOD;}
+                if (F1 == 32) {func = TypeFL::CHLmm; return NLOGOOD;}
+                if (F1 == 33) {func = TypeFL::CHLtata; return NLOGOOD;}
+                return NOTIMPLEMENT;
+            }
         }
         else if (S1 == 4)
         {
+            std::cerr<<"Please use GetNLOFuncSFFC for charged scalar"<<std::endl;
             return NOTIMPLEMENT;
         }
         else if (S1 == 2)
@@ -3420,24 +3573,110 @@ int GetNLOFuncSFF(int S1, int F1, int F2, int type, CFunc_NLO &func) {
         return NOTIMPLEMENT;
     }
 }
-int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
-// This actually is independent of Yukawa type. But I still use it.
-    if (V1!=V2)
+int GetNLOFuncSFFC(int S1,int F1,int F2,int type,CFunc_NLO &func_PL, CFunc_NLO &func_PR) {
+    if (S1 != 4)
+    {
+        std::cerr<<"For Neutral scalar, please use GetNLOFuncSFF."<<std::endl;
+        return NOTIMPLEMENT;
+    }
+    if (type == 1)
+    {
+        if ((F1 == 11 && F2 == 21) || (F1 == 21 && F2 == 11)) {func_PL = TypeI::CHpud_PL; func_PR = TypeI::CHpud_PR; return NLOGOOD;}
+        if ((F1 == 12 && F2 == 22) || (F1 == 22 && F2 == 12)) {func_PL = TypeI::CHpcs_PL; func_PR = TypeI::CHpcs_PR; return NLOGOOD;}
+        if ((F1 == 13 && F2 == 23) || (F1 == 23 && F2 == 13)) {func_PL = TypeI::CHptb_PL; func_PR = TypeI::CHptb_PR; return NLOGOOD;}
+        if ((F1 == 31 && F2 == 41) || (F1 == 41 && F2 == 31)) {func_PL = TypeI::CHpelev_PL; func_PR = TypeI::CHpelev_PR; return NLOGOOD;}
+        if ((F1 == 32 && F2 == 42) || (F1 == 42 && F2 == 32)) {func_PL = TypeI::CHpmuonv_PL; func_PR = TypeI::CHpmuonv_PR; return NLOGOOD;}
+        if ((F1 == 33 && F2 == 43) || (F1 == 43 && F2 == 33)) {func_PL = TypeI::CHptauv_PL; func_PR = TypeI::CHptauv_PR; return NLOGOOD;}
+        return NOTIMPLEMENT;
+    }
+    else if (type == 2)
+    {
+        if ((F1 == 11 && F2 == 21) || (F1 == 21 && F2 == 11)) {func_PL = TypeII::CHpud_PL; func_PR = TypeII::CHpud_PR; return NLOGOOD;}
+        if ((F1 == 12 && F2 == 22) || (F1 == 22 && F2 == 12)) {func_PL = TypeII::CHpcs_PL; func_PR = TypeII::CHpcs_PR; return NLOGOOD;}
+        if ((F1 == 13 && F2 == 23) || (F1 == 23 && F2 == 13)) {func_PL = TypeII::CHptb_PL; func_PR = TypeII::CHptb_PR; return NLOGOOD;}
+        if ((F1 == 31 && F2 == 41) || (F1 == 41 && F2 == 31)) {func_PL = TypeII::CHpelev_PL; func_PR = TypeII::CHpelev_PR; return NLOGOOD;}
+        if ((F1 == 32 && F2 == 42) || (F1 == 42 && F2 == 32)) {func_PL = TypeII::CHpmuonv_PL; func_PR = TypeII::CHpmuonv_PR; return NLOGOOD;}
+        if ((F1 == 33 && F2 == 43) || (F1 == 43 && F2 == 33)) {func_PL = TypeII::CHptauv_PL; func_PR = TypeII::CHptauv_PR; return NLOGOOD;}
+        return NOTIMPLEMENT;
+    }
+    else if (type == 3)
+    {
+        if ((F1 == 11 && F2 == 21) || (F1 == 21 && F2 == 11)) {func_PL = TypeFL::CHpud_PL; func_PR = TypeFL::CHpud_PR; return NLOGOOD;}
+        if ((F1 == 12 && F2 == 22) || (F1 == 22 && F2 == 12)) {func_PL = TypeFL::CHpcs_PL; func_PR = TypeFL::CHpcs_PR; return NLOGOOD;}
+        if ((F1 == 13 && F2 == 23) || (F1 == 23 && F2 == 13)) {func_PL = TypeFL::CHptb_PL; func_PR = TypeFL::CHptb_PR; return NLOGOOD;}
+        if ((F1 == 31 && F2 == 41) || (F1 == 41 && F2 == 31)) {func_PL = TypeFL::CHpelev_PL; func_PR = TypeFL::CHpelev_PR; return NLOGOOD;}
+        if ((F1 == 32 && F2 == 42) || (F1 == 42 && F2 == 32)) {func_PL = TypeFL::CHpmuonv_PL; func_PR = TypeFL::CHpmuonv_PR; return NLOGOOD;}
+        if ((F1 == 33 && F2 == 43) || (F1 == 43 && F2 == 33)) {func_PL = TypeFL::CHptauv_PL; func_PR = TypeFL::CHptauv_PR; return NLOGOOD;}
+        return NOTIMPLEMENT;
+    }
+    else if (type == 4)
+    {
+        if ((F1 == 11 && F2 == 21) || (F1 == 21 && F2 == 11)) {func_PL = TypeLS::CHpud_PL; func_PR = TypeLS::CHpud_PR; return NLOGOOD;}
+        if ((F1 == 12 && F2 == 22) || (F1 == 22 && F2 == 12)) {func_PL = TypeLS::CHpcs_PL; func_PR = TypeLS::CHpcs_PR; return NLOGOOD;}
+        if ((F1 == 13 && F2 == 23) || (F1 == 23 && F2 == 13)) {func_PL = TypeLS::CHptb_PL; func_PR = TypeLS::CHptb_PR; return NLOGOOD;}
+        if ((F1 == 31 && F2 == 41) || (F1 == 41 && F2 == 31)) {func_PL = TypeLS::CHpelev_PL; func_PR = TypeLS::CHpelev_PR; return NLOGOOD;}
+        if ((F1 == 32 && F2 == 42) || (F1 == 42 && F2 == 32)) {func_PL = TypeLS::CHpmuonv_PL; func_PR = TypeLS::CHpmuonv_PR; return NLOGOOD;}
+        if ((F1 == 33 && F2 == 43) || (F1 == 43 && F2 == 33)) {func_PL = TypeLS::CHptauv_PL; func_PR = TypeLS::CHptauv_PR; return NLOGOOD;}
+        return NOTIMPLEMENT;
+    }
+    else
     {
         return NOTIMPLEMENT;
     }
+}
+int GetNLOFuncSVV(int S1,int V1,int V2,int type,CFunc_NLO &func_gmunu, CFunc_NLO &func_kmuqnu) {
     if (type==1)
     {
         if (S1==2)
         {
-            if (V1 == 2)
+            if (V1 == 2 && V2 == 2)
             {
-                func = TypeI::CHHZZ;
+                func_gmunu = TypeI::CHHZZ_gmunu;
+                func_kmuqnu = TypeI::CHHZZ_kmuqnu;
                 return NLOGOOD;
             }
-            else if (V1 == 3)
+            else if (V1 == 3 && V2 == 3)
             {
-                func = TypeI::CHHWW;
+                func_gmunu = TypeI::CHHWW_gmunu;
+                func_kmuqnu = TypeI::CHHWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==1)
+        {
+            if (V1 == 2 && V2 == 2)
+            {
+                func_gmunu = TypeI::CHLZZ_gmunu;
+                func_kmuqnu = TypeI::CHLZZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if (V1 == 3 && V2 == 3)
+            {
+                func_gmunu = TypeI::CHLWW_gmunu;
+                func_kmuqnu = TypeI::CHLWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==4)
+        {
+            if ( (V1 == 2 && V2 == 3) || (V1 == 3 && V2 == 2))
+            {
+                func_gmunu = TypeI::CHpWpZ_gmunu;
+                func_kmuqnu = TypeI::CHpWpZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if ( (V1 == 1 && V2 == 3) || (V1 == 3 && V2 == 1) )
+            {
+                func_gmunu = TypeI::CHpWpGa_gmunu;
+                func_kmuqnu = TypeI::CHpWpGa_kmuqnu;
                 return NLOGOOD;
             }
             else
@@ -3450,18 +3689,58 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type==2)
+    else if (type==2)
     {
         if (S1==2)
         {
-            if (V1 == 2)
+            if (V1 == 2 && V2 == 2)
             {
-                func = TypeII::CHHZZ;
+                func_gmunu = TypeII::CHHZZ_gmunu;
+                func_kmuqnu = TypeII::CHHZZ_kmuqnu;
                 return NLOGOOD;
             }
-            else if (V1 == 3)
+            else if (V1 == 3 && V2 == 3)
             {
-                func = TypeII::CHHWW;
+                func_gmunu = TypeII::CHHWW_gmunu;
+                func_kmuqnu = TypeII::CHHWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==1)
+        {
+            if (V1 == 2 && V2 == 2)
+            {
+                func_gmunu = TypeII::CHLZZ_gmunu;
+                func_kmuqnu = TypeII::CHLZZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if (V1 == 3 && V2 == 3)
+            {
+                func_gmunu = TypeII::CHLWW_gmunu;
+                func_kmuqnu = TypeII::CHLWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==4)
+        {
+            if ( (V1 == 2 && V2 == 3) || (V1 == 3 && V2 == 2))
+            {
+                func_gmunu = TypeII::CHpWpZ_gmunu;
+                func_kmuqnu = TypeII::CHpWpZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if ( (V1 == 1 && V2 == 3) || (V1 == 3 && V2 == 1) )
+            {
+                func_gmunu = TypeII::CHpWpGa_gmunu;
+                func_kmuqnu = TypeII::CHpWpGa_kmuqnu;
                 return NLOGOOD;
             }
             else
@@ -3474,18 +3753,58 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type==4)
+    else if (type==4)
     {
         if (S1==2)
         {
-            if (V1 == 2)
+            if (V1 == 2 && V2 == 2)
             {
-                func = TypeLS::CHHZZ;
+                func_gmunu = TypeLS::CHHZZ_gmunu;
+                func_kmuqnu = TypeLS::CHHZZ_kmuqnu;
                 return NLOGOOD;
             }
-            else if (V1 == 3)
+            else if (V1 == 3 && V2 == 3)
             {
-                func = TypeLS::CHHWW;
+                func_gmunu = TypeLS::CHHWW_gmunu;
+                func_kmuqnu = TypeLS::CHHWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==1)
+        {
+            if (V1 == 2 && V2 == 2)
+            {
+                func_gmunu = TypeLS::CHLZZ_gmunu;
+                func_kmuqnu = TypeLS::CHLZZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if (V1 == 3 && V2 == 3)
+            {
+                func_gmunu = TypeLS::CHLWW_gmunu;
+                func_kmuqnu = TypeLS::CHLWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==4)
+        {
+            if ( (V1 == 2 && V2 == 3) || (V1 == 3 && V2 == 2))
+            {
+                func_gmunu = TypeLS::CHpWpZ_gmunu;
+                func_kmuqnu = TypeLS::CHpWpZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if ( (V1 == 1 && V2 == 3) || (V1 == 3 && V2 == 1) )
+            {
+                func_gmunu = TypeLS::CHpWpGa_gmunu;
+                func_kmuqnu = TypeLS::CHpWpGa_kmuqnu;
                 return NLOGOOD;
             }
             else
@@ -3498,18 +3817,58 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
             return NOTIMPLEMENT;
         }
     }
-    if (type==3)
+    else if (type==3)
     {
         if (S1==2)
         {
-            if (V1 == 2)
+            if (V1 == 2 && V2 == 2)
             {
-                func = TypeFL::CHHZZ;
+                func_gmunu = TypeFL::CHHZZ_gmunu;
+                func_kmuqnu = TypeFL::CHHZZ_kmuqnu;
                 return NLOGOOD;
             }
-            else if (V1 == 3)
+            else if (V1 == 3 && V2 == 3)
             {
-                func = TypeFL::CHHWW;
+                func_gmunu = TypeFL::CHHWW_gmunu;
+                func_kmuqnu = TypeFL::CHHWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==1)
+        {
+            if (V1 == 2 && V2 == 2)
+            {
+                func_gmunu = TypeFL::CHLZZ_gmunu;
+                func_kmuqnu = TypeFL::CHLZZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if (V1 == 3 && V2 == 3)
+            {
+                func_gmunu = TypeFL::CHLWW_gmunu;
+                func_kmuqnu = TypeFL::CHLWW_kmuqnu;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
+        }
+        else if (S1==4)
+        {
+            if ( (V1 == 2 && V2 == 3) || (V1 == 3 && V2 == 2))
+            {
+                func_gmunu = TypeFL::CHpWpZ_gmunu;
+                func_kmuqnu = TypeFL::CHpWpZ_kmuqnu;
+                return NLOGOOD;
+            }
+            else if ( (V1 == 1 && V2 == 3) || (V1 == 3 && V2 == 1) )
+            {
+                func_gmunu = TypeFL::CHpWpGa_gmunu;
+                func_kmuqnu = TypeFL::CHpWpGa_kmuqnu;
                 return NLOGOOD;
             }
             else
@@ -3528,7 +3887,6 @@ int GetNLOFuncSVV(int S1, int V1, int V2, int type, CFunc_NLO &func) {
     }
 }
 int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
-// This actually is independent of Yukawa type. But I still use it.
     if (type == 1)
     {
         if (S1 == 1)
@@ -3591,7 +3949,25 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
         }
         else if (S1 == 4)
         {
-            return NOTIMPLEMENT;
+            if (S2 == 1 && V1 == 3)
+            {
+                func = TypeI::CHpHLWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 2 && V1 == 3)
+            {
+                func = TypeI::CHpHHWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 3 && V1 == 3)
+            {
+                func = TypeI::CHpHAWp;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
         }
         else
         {
@@ -3660,7 +4036,25 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
         }
         else if (S1 == 4)
         {
-            return NOTIMPLEMENT;
+            if (S2 == 1 && V1 == 3)
+            {
+                func = TypeII::CHpHLWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 2 && V1 == 3)
+            {
+                func = TypeII::CHpHHWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 3 && V1 == 3)
+            {
+                func = TypeII::CHpHAWp;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
         }
         else
         {
@@ -3729,7 +4123,25 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
         }
         else if (S1 == 4)
         {
-            return NOTIMPLEMENT;
+            if (S2 == 1 && V1 == 3)
+            {
+                func = TypeLS::CHpHLWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 2 && V1 == 3)
+            {
+                func = TypeLS::CHpHHWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 3 && V1 == 3)
+            {
+                func = TypeLS::CHpHAWp;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
         }
         else
         {
@@ -3798,7 +4210,25 @@ int GetNLOFuncSSV(int S1, int S2, int V1, int type, CFunc_NLO &func) {
         }
         else if (S1 == 4)
         {
-            return NOTIMPLEMENT;
+            if (S2 == 1 && V1 == 3)
+            {
+                func = TypeFL::CHpHLWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 2 && V1 == 3)
+            {
+                func = TypeFL::CHpHHWp;
+                return NLOGOOD;
+            }
+            else if (S2 == 3 && V1 == 3)
+            {
+                func = TypeFL::CHpHAWp;
+                return NLOGOOD;
+            }
+            else
+            {
+                return NOTIMPLEMENT;
+            }
         }
         else
         {
