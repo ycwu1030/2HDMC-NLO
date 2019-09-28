@@ -482,7 +482,10 @@ double DecayTable::get_gamma_hWZ(int h) {
   if (h!=4) return 0.;
 
   if (gamma_hWZ[h]>=0) return gamma_hWZ[h];
-  
+  double M  = model.get_hmass(h);
+  double mW = sm.get_vmass(3);
+  double mZ = sm.get_vmass(2);
+  if (M < mW + mZ) return 0.;
   gamma_hWZ[h] = hWZ(h);
   return gamma_hWZ[h];
 }
